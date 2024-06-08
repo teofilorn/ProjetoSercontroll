@@ -1,19 +1,19 @@
 import prismaClient from "../prisma"
 
 interface DeleteCustomerProps{
-    id: string;
+    cpf: string;
 }
 
 class DeleteCustomerService{
-    async execute({id}: DeleteCustomerProps){
+    async execute({cpf}: DeleteCustomerProps){
 
-        if(!id){
+        if(!cpf){
             throw new Error("Solicitação inválida")
         }
         
         const findCustomer = await prismaClient.customer.findFirst({
             where: {
-                id: id
+                cpf: cpf
             }
         })
 
@@ -22,7 +22,7 @@ class DeleteCustomerService{
         }
         await prismaClient.customer.delete({
             where: {
-                id: findCustomer.id
+                cpf: findCustomer.cpf
             }
         })
 
