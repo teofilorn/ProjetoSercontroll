@@ -9,13 +9,17 @@ class CreateCustumerController{
         
         //CONST Está extraindo as propriedades name e email do objeto request.body e armazenando-as em constantes com os mesmos nomes
         //AS  Está informando ao compilador TypeScript que request.body é um objeto com as propriedades name e email, ambas do tipo String
-        const { name, email} = request.body as{ name: String, email: String};
+        const { cpf, name, telefone, email, senha, confSenha} = request.body as{ cpf: String, name: String, telefone: String, email: String, senha: String, confSenha: String};
+        console.log(cpf);
         console.log(name);
+        console.log(telefone);
         console.log(email);
+        console.log(senha);
+        console.log(confSenha);
 
         //contorller recebe "execute" da aplicação e repassa para o Serviços
         const customerService = new CreateCustomerService()
-        const customer = await customerService.execute({name, email});
+        const customer = await customerService.execute({cpf, name, telefone, email, senha});
 
         //recebe de volta do Serviço e devolve pro usuário
         reply.send(customer);
