@@ -1,7 +1,8 @@
 import prismaClient from "../prisma";
+import bcrypt from 'bcrypt';
 
 //Criando tipagem
-interface CreateCustomerProps{
+export interface CreateCustomerProps{
     cpf: string;
     name: string;
     telefone: string;
@@ -21,7 +22,9 @@ class CreateCustomerService{
         //if(senha !== confSenha ){
         //    throw new Error("As senhas devem ser iguais");
         //}
-
+      
+        // Hash da senha
+        const hashedPassword = await bcrypt.hash(senha, 10);
 
         //para salvar no bd cria um const AWAIT para esperar prisma (ORM}
         //chama o customer (modelo criado no prisma) e cria no banco de dados
@@ -32,7 +35,7 @@ class CreateCustomerService{
                 name: name,
                 telefone: telefone,
                 email: email,
-                senha: senha,
+                senha: hashedPassword,
                 status: true
             }
         })

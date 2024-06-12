@@ -1,28 +1,18 @@
-import {FastifyRequest, FastifyReply} from "fastify"
-import {CreateCustomerService} from '../services/createCustomerService'
-
+import {FastifyRequest, FastifyReply, FastifyInstance} from "fastify"
+import {CreateCustomerProps, CreateCustomerService} from '../services/createCustomerService'
 
 //Controller de rota para Cadastro de clientes
 //Dentro do REQUEST tem acesso ao body, querys e headers da aplicação
 class CreateCustumerController{
-    async handle(request: FastifyRequest, reply: FastifyReply){
+    async handle(request: FastifyRequest, reply: FastifyReply, fastify: FastifyInstance){
+
+        const data = request.body as CreateCustomerProps
+        // Retornar uma resposta simples
         
-        //CONST Está extraindo as propriedades name e email do objeto request.body e armazenando-as em constantes com os mesmos nomes
-        //AS  Está informando ao compilador TypeScript que request.body é um objeto com as propriedades name e email, ambas do tipo String
-        const { cpf, name, telefone, email, senha, confSenha} = request.body as{ cpf: String, name: String, telefone: String, email: String, senha: String, confSenha: String};
-        console.log(cpf);
-        console.log(name);
-        console.log(telefone);
-        console.log(email);
-        console.log(senha);
-        console.log(confSenha);
-
-        //contorller recebe "execute" da aplicação e repassa para o Serviços
-        const customerService = new CreateCustomerService()
-        const customer = await customerService.execute({cpf, name, telefone, email, senha});
-
-        //recebe de volta do Serviço e devolve pro usuário
-        reply.send(customer);
+        const listCustomerService = new CreateCustomerService();
+        const customers = await listCustomerService.execute(data);
+        const token = fastify.jwt.sign({ email: customers.email, cpf: customers.cpf })
+        reply.send({ token });
     }
 
 }

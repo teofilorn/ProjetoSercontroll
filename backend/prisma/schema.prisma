@@ -17,8 +17,9 @@ model Customer {
   cpf String @id @map("_id")
   name String
   telefone String?
-  email String?
+  email String @unique
   senha String
+  isAdmin Boolean @default(false)
   status Boolean
   created_at DateTime? @default(now())
   updated_at DateTime? @default(now())
